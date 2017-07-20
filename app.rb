@@ -12,9 +12,25 @@ get '/exec' do
   r.exec.to_s
 end
 
-post '/exec' do
-  p params[:language]
-  p params[:program]
-  p params[:stdin]
+post '/api/run' do
+  lang = params[:language]
+  prog = params[:program]
+  stdin = params[:stdin]
+  prog.gsub!(/\r\n|\n|\r/) {'\n'}
+  stdin.gsub!(/\r\n|\n|\r/) {'\n'}
+  time = Time.now.to_f
+  p_fname = "#{time}.#{lang.downcase!}" # プログラムファイル
+  i_fname = "#{time}.in" # 標準入力ファイル
+
+  File.open("tmp/#{p_fname}", 'w') do |f|
+    prog.split('\n').each do |l|
+      f.puts(l)
+    end
+  end
+  File.open("tmp/#{i_fname}", 'w') do |f|
+    stdin.split('\n').each do |l|
+      f.puts(l)
+    end
+  end
   redirect '/', 303
 end
