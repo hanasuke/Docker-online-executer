@@ -11,3 +11,10 @@ get '/exec' do
   r = ExecutionContainer.new()
   r.exec.to_s
 end
+
+post '/exec' do
+  p params[:language]
+  p params[:program]
+  p params[:stdin]
+  redirect '/', 303
+end

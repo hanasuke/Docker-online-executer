@@ -4,6 +4,20 @@ html
     title オンライン実行システム
 
   body
-    h1 はろーわーるど
+    h1 オンラインC実行システム
 
-    p ここにテキストボックスができます。
+    form[action='/exec' method="POST"]
+      p
+        | 言語
+        select#lang[name='language']
+          option[value='C'] C
+      p
+        | ソースコード
+        br
+        textarea[name='program' rows='15' cols='60']
+      p
+        | 標準入力
+        br
+        textarea[name='stdin' rows='2' cols='60']
+
+      input[type='submit' value='送信']
