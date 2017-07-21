@@ -8,7 +8,7 @@ get '/' do
 end
 
 get '/exec' do
-  r = ExecutionContainer.new()
+  r = ExecutionContainer.new(Time.now.to_f, 'c')
   r.exec.to_s
 end
 
@@ -32,5 +32,7 @@ post '/api/run' do
       f.puts(l)
     end
   end
-  redirect '/', 303
+  r = ExecutionContainer.new(time, lang)
+  r.exec.to_s
+  #redirect '/', 303
 end

@@ -1,19 +1,33 @@
 require 'docker-api'
 
 class ExecutionContainer
-  def initialize()
-    @c = Docker::Container.create(
-      Image: 'wing-env',
+  def initialize(time, lang)
+    @lang = lang
+    @time = time
+
+    @container = Docker::Container.create(
+      name: "#{time}-exec-container",
+      Image: 'wsp',
+      HostConfig: {
+        Binds: [
+          "#{File.expand_path('tmp')}:/tmp"
+        ]
+      },
+      Workdir: '/tmp',
       Tty: true
     )
-    p @c
   end
 
   def exec()
-    @c.start
-    r = @c.exec(['bash','-c','ls -l'])
-    @c.stop
-    @c.delete(force: true)
+    compile_cmd = ''
+    case @lang
+    when 'c' then
+      compile_cmd = "gcc -o #{@time}"
+    end
+    @container.start
+    r = @container.exec(['bash','-c', "cd /tmp && #{compile_cmd} #{@time}.#{@lang} && ./#{@time} < #{@time}.in"])
+    @container.stop
+    #@container.delete(force: true)
     return r
   end
 end
