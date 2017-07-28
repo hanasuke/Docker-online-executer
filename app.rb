@@ -14,12 +14,10 @@ end
 
 post '/api/run' do
   lang = params[:language]
-  prog = params[:program]
-  stdin = params[:stdin]
-  prog.gsub!(/\r\n|\n|\r/) {'\n'}
-  stdin.gsub!(/\r\n|\n|\r/) {'\n'}
+  prog = params[:source_code]
+  stdin = params[:input]
   time = Time.now.to_f
-  p_fname = "#{time}.#{lang.downcase!}" # プログラムファイル
+  p_fname = "#{time}.#{lang.downcase}" # プログラムファイル
   i_fname = "#{time}.in" # 標準入力ファイル
 
   File.open("tmp/#{p_fname}", 'w') do |f|
@@ -32,7 +30,11 @@ post '/api/run' do
       f.puts(l)
     end
   end
-  r = ExecutionContainer.new(time, lang)
-  r.exec.to_s
-  #redirect '/', 303
+  c = ExecutionContainer.new(time, lang)
+
+  r = c.exec()
+
+  return_params = {stdout: r[0].join(''), stderr: r[1].join(''), exit_code: r[2]}
+  content_type :json
+  return_params.to_json
 end
