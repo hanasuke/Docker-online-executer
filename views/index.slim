@@ -1,23 +1,43 @@
-doctype html
 html
   head
-    title オンライン実行システム
-
+    meta[charset="UTF-8"]
+    title
+      | 簡易オンラインジャッジシステム
   body
-    h1 オンラインC実行システム
+    h1
+      | コードをDockerコンテナで実行!
+    select#language
+      option[value="ruby"]
+        | Ruby
+      option[value="python"]
+        | Python
+      option[value="c"]
+        | C
+    br
+    |  ソースコード:
+    br
+    #source_code[style="width= 100%; height: 200px; border: 1px solid;"]
+    |  標準入力:
+    br
+    textarea#input[name="" cols="30" rows="10" style="width: 100%; height: 50px; resize: vertical;"]
+    button#run_button.btn.btn-primary
+      | 実行(Ctrl+Enter)
+    br
+    hr
+    |  標準出力:
+    pre
 
-    form[action='/api/run' method="POST"]
-      p
-        | 言語
-        select#lang[name='language']
-          option[value='C'] C
-      p
-        | ソースコード
-        br
-        textarea[name='program' rows='15' cols='60']
-      p
-        | 標準入力
-        br
-        textarea[name='stdin' rows='2' cols='60']
+    #stdout[style="background: lightgray"]
+    |  標準エラー出力:
+    pre
 
-      input[type='submit' value='送信']
+    #stderr[style="background: lightgray"]
+    |  実行時間:
+    #time[style="background: lightgray"]
+    |  終了コード:
+    #exit_code[style="background: lightgray"]
+    script[src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"]
+    script[src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"]
+    script[src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ext-language_tools.js"]
+    script[src="run.js"]
+    script[src="ui.js"]
