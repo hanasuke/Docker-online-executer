@@ -38,3 +38,7 @@ post '/api/run' do
   content_type :json
   return_params.to_json
 end
+
+get '/api/stat' do
+  return 'hello'
+end
